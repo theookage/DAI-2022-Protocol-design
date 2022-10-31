@@ -1,7 +1,7 @@
 package ch.heigvd.api.calc;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,11 +17,10 @@ public class Client {
      *
      * @param args no args required
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Log output on a single line
         System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
-
-        BufferedReader stdin = null;
+        final int DESTINATION_PORT = 9999;
 
         /* TODO: Implement the client here, according to your specification
          *   The client has to do the following:
@@ -33,7 +32,14 @@ public class Client {
          *     - read the response line from the server (using BufferedReader.readLine)
          */
 
-        stdin = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader fromServer = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter toServer = new BufferedWriter(new OutputStreamWriter(System.out));
+        Socket clientSocket = new Socket("127.0.0.1", DESTINATION_PORT);
+        toServer.write("QUIT");
+        toServer.flush();
 
+        fromServer.close();
+        toServer.close();
+        clientSocket.close();
     }
 }
