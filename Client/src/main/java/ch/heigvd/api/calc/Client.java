@@ -2,6 +2,7 @@ package ch.heigvd.api.calc;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,13 +32,19 @@ public class Client {
          *     - send the command to the server
          *     - read the response line from the server (using BufferedReader.readLine)
          */
-
-        BufferedReader fromServer = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter toServer = new BufferedWriter(new OutputStreamWriter(System.out));
         Socket clientSocket = new Socket("127.0.0.1", DESTINATION_PORT);
-        toServer.write("QUIT");
-        toServer.flush();
+        BufferedReader fromClient = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader fromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
+        BufferedWriter toServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8));
 
+        String message;
+        do {
+            System.out.println(fromServer);
+            message = fromClient.readLine();
+            toServer.write(message);
+            toServer.flush();
+
+        }while (!message.equals("QUIT") && !message.equals("QUIT/r/n"));
         fromServer.close();
         toServer.close();
         clientSocket.close();
