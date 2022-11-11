@@ -37,6 +37,7 @@ public class Server {
          */
         final int LISTEN_PORT = 9999;
         serverSocket = new ServerSocket(LISTEN_PORT);
+        System.out.println("Server listening on port: " + LISTEN_PORT);
 
         // Boucle pour garder le serveur "allumé"
         while(true) {
@@ -60,23 +61,30 @@ public class Server {
          *     - Handle the message
          *     - Send to result to the client
          */
+        System.out.println("user connected");
         BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
 
+        // Afficher le message de bienvenue
         String welcome = "WELCOME" + CRLF +
                 "- AVAILABLE OPERATIONS " + CRLF;
         writer.write(welcome);
         writer.flush();
 
-        System.out.println("user connected");
-
         // Continuer la connexion tant que l'utilisateur ne rentre pas QUIT CRLF
         String message = "";
         while(!Objects.equals(message, "QUIT" + CRLF) && !Objects.equals(message, "QUIT")) {
             message = reader.readLine();
-            System.out.println(message);
+
+            if(message.startsWith("COMPUTE")) {
+                int v1;
+                int v2;
+                message.split(" ");
+
+            }
         }
 
+        System.out.println("Connexion fermée !");
         writer.close();
         reader.close();
         clientSocket.close();
