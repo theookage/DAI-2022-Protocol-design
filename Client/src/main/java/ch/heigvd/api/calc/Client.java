@@ -38,13 +38,21 @@ public class Client {
         BufferedWriter toServer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8));
 
         String message;
+        String answer;
+        System.out.println(fromServer.readLine());
         do {
-            System.out.println(fromServer);
+
+            System.out.println(fromServer.readLine());
+
             message = fromClient.readLine();
             toServer.write(message);
+
             toServer.flush();
 
+            System.out.println(fromServer.readLine());
+
         }while (!message.equals("QUIT") && !message.equals("QUIT/r/n"));
+
         fromServer.close();
         toServer.close();
         clientSocket.close();
